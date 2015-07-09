@@ -16,6 +16,8 @@ int main(int argc, char** argv){
     printf("usage: %s <filename>\n", argv[0]);
     exit(1);
   }
+
+  //++  separate argv_file into some files  +++++++++++++++
   char* filename = argv[1];
   char outfile[50];
   char str1[] = "part";
@@ -55,7 +57,7 @@ int main(int argc, char** argv){
   free(buffer);
   fclose(inputfp);
 
-  //++  merge  +++++++++++++++
+  //++  merge each two blocks  +++++++++++++++
   int length = 4 * num;
   char str2[] = "tmp";
   size_t ret1,ret2;
@@ -71,8 +73,7 @@ int main(int argc, char** argv){
       exit(1);
     }
   }
-  
-  //merge
+ 
   int* buffer1;
   int* buffer2;
   int bf_block, block = num;
@@ -135,14 +136,17 @@ int main(int argc, char** argv){
 
   
 
-  //Each of fp[outf]
+  //Here, each of fp[outf]
   //  (fp[outf][0],fp[outf][1],..,fp[outf][part_file-1])
   //has sorted data.
+ 
   for(i=0;i<part_file;i++){
    fseek(fp[outf][i], 0, SEEK_SET);
     fclose(fp[readf][i]);
   }
  
+
+  //++  merge all files,and make result file  +++++++++++++++
   //open file
   bf_block =  4*num;
   int *sorted_buf = (int*)malloc( bf_block * sizeof(int));
